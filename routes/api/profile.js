@@ -6,6 +6,7 @@ const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const { check, validationResult } = require('express-validator/check');
+const Post = require('../../models/Post');
 
 //GET api/profile/me
 //get current user's profile
@@ -70,6 +71,7 @@ router.post(
     profileFields.user = req.user.id;
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
+    if (bio) profileFields.bio = bio;
     if (location) profileFields.location = location;
     if (status) profileFields.status = status;
     if (githubusername) profileFields.githubusername = githubusername;
@@ -146,6 +148,8 @@ router.get('/user/:user_id', async (req, res) => {
 //private
 router.delete('/', auth, async (req, res) => {
   try {
+    //remove user posts
+    await Post.deleteMany({ user: req.user.id });
     //remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     //remove user
