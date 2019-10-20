@@ -45,7 +45,7 @@ export default function(state = initialState, action) {
         repos: [],
         loading: false
       };
-    case CLEAR_PROFILE:
+    case GET_REPOS:
       return {
         ...state,
         repos: payload,
